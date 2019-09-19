@@ -163,7 +163,7 @@ uint8_t emulate_8080_op(state_8080 *state){
 			// RLC
 			{
 				uint8_t answer = state->a;
-				state->a = ((answer & 0x80) >> 7) || (answer << 1);
+				state->a = ((answer & 0x80) >> 7) | (answer << 1);
 				state->cc.cy = (0x80 == (answer & 0x80));
 			}
 			break;

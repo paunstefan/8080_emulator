@@ -3,6 +3,7 @@
 #include <thread>
 #include <string>
 #include <iostream>
+#include <SDL2/SDL.h>
 #include "SIMachine.hpp"
 #include "Display.hpp"
 #include "emulator.h"
@@ -50,6 +51,74 @@ void SIMachine::start_emulation(){
 	using namespace std::chrono;
 
 	while(1){
+		SDL_Event event;
+
+		if(SDL_PollEvent(&event)){
+			switch(event.type){
+				case SDL_KEYDOWN:
+					switch(event.key.keysym.scancode){
+						case SDL_SCANCODE_LEFT:
+							// left
+							this->in_port1 |= 0x20;
+							break;
+						case SDL_SCANCODE_RIGHT:
+							// right
+							this->in_port1 |= 0x40;
+							break;
+						case SDL_SCANCODE_SPACE:
+							// fire
+							this->in_port1 |= 0x10;
+							break;
+						case SDL_SCANCODE_E:
+							// start p1
+							this->in_port1 |= 0x4;
+							break;
+						case SDL_SCANCODE_C:
+							// coin
+							this->in_port1 |= 0x1;
+							break;
+						case SDL_SCANCODE_Q:
+							// coin
+							SDL_DestroyWindow(this->display->window);
+							SDL_Quit();
+							exit(1);
+							break;
+						default:
+							break;
+						}
+					break;
+
+				case SDL_KEYUP:
+					switch(event.key.keysym.scancode){
+						case SDL_SCANCODE_LEFT:
+							// left
+							this->in_port1 &= ~0x20;
+							break;
+						case SDL_SCANCODE_RIGHT:
+							// right
+							this->in_port1 &= ~0x40;
+							break;
+						case SDL_SCANCODE_SPACE:
+							// fire
+							this->in_port1 &= ~0x10;
+							break;
+						case SDL_SCANCODE_E:
+							// start p1
+							this->in_port1 &= ~0x4;
+							break;
+						case SDL_SCANCODE_C:
+							// coin
+							this->in_port1 &= ~0x1;
+							break;
+						default:
+							break;
+						}
+					break;
+				default:
+					break;
+			}
+		}
+
 		this->run();
 		sleep_for(milliseconds(1));
 	}
@@ -154,7 +223,7 @@ uint8_t SIMachine::input_SI(uint8_t port){
 		case 0:
 			return 1;
 		case 1:
-			return 0;
+			return this->in_port1;
 		case 3:
 			{
 				uint16_t v = (this->shift1 << 8) | this->shift0;

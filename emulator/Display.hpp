@@ -6,7 +6,7 @@
 /**
 	Display class. Wraps the SDL2 interactions.
 */
-class Display{
+struct Display{
 	SDL_Window *window = NULL;
 	SDL_Surface *surface = NULL;
 

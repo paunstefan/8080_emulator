@@ -20,6 +20,7 @@ struct SIMachine{
 	uint8_t shift0;
 	uint8_t shift1;
 	uint8_t shift_offset;
+	uint8_t in_port1;
 
 	Display *display;
 
