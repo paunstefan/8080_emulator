@@ -8,7 +8,10 @@
 */
 struct Display{
 	SDL_Window *window = NULL;
-	SDL_Surface *surface = NULL;
+	SDL_Renderer *renderer = NULL;
+	SDL_Texture *sdlTexture = NULL;
+
+	uint32_t pixels[256*224];
 
 public:
 	Display();
